@@ -30,8 +30,8 @@ const main = () => {
 	const maxResults = {};
 	const engine = new MonopolyEngine();
 
-	const N = 10;
-	const verbose = 2; // Flags: 1 - results of each run, 2 - steps of each run
+	const N = 100000;
+	const verbose = 0; // Flags: 1 - results of each run, 2 - steps of each run
 	for (let i = 0; i < N; i++) {
 		engine.play(FREE_DICES, new ReplicateDiceStrategy(), verbose);
 		// engine.play(FREE_DICES, new ReplicateDiceWhenFarEnoughStrategy(), verbose);

@@ -44,7 +44,7 @@ class MonopolyEngine {
 	start() {
 		this.reset();
 		this.resources['Dice'] = FREE_DICES;
-		// this.resources['Lucky Dice'] = 4;
+		// this.resources['Lucky Dice'] = FREE_DICES;
 	}
 
 	/**
@@ -129,6 +129,7 @@ class MonopolyEngine {
 
 		if ((this.effect === Effect.KARMA && (nextStep % 2 === 1)) || (this.effect === Effect.MOVE_BACK)) {
 			this.position = (this.position - nextStep) % this.field.length; // step back without collecting or upgrading
+			nextStep = -nextStep;
 		}
 		else {
 
@@ -145,7 +146,7 @@ class MonopolyEngine {
 
 		const landedOn = this.field[this.position];
 
-		if (this.effect !== Effect.EAT_RESOURCES)
+		if (this.effect !== Effect.EAT_RESOURCES && nextStep > 0)
 			this.addReward(landedOn);
 
 		if (nextStep > 0) //don't upgrade on moving back
@@ -248,6 +249,7 @@ class TarotTile extends Tile {
 
 	/** @returns {TEffect} */
 	getEffect() {
+		// return Effect.MOVE_BACK;
 		const allTarotEffects = Object.values(Effect).filter(e => e !== 'NONE' && e !== 'KARMA');
 		const effectIdx = randomInt(0, allTarotEffects.length - 1);
 
