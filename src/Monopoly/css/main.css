@@ -1,0 +1,13 @@
+body {
+	background-color: #3fd575;
+	margin-top: 40px;
+}
+
+h1, h2, h3 {
+	text-align: center;
+}
+
+#dev-toolbar {
+	text-align: center;
+	margin-top: 25px;
+}

@@ -1,0 +1,28 @@
+#field {
+	background-image: url("../../../img/field.png");
+	background-size:     cover;
+    background-repeat:   no-repeat;
+    background-position: center center;
+	width: 700px;
+	height: 537px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#field.highlighted {
+	border: 3px solid white;
+}
+
+#field.highlighted tr {
+    border: 3px solid white;
+}
+#field.highlighted td, #field.highlighted th {
+    border: 3px solid white;
+}
+
+.active {
+	background-image: url(../../../img/imp.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+}
