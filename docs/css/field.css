@@ -1,5 +1,5 @@
 #field {
-	background-image: url("../../../img/field.png");
+	background-image: url("../img/field.png");
 	background-size:     cover;
     background-repeat:   no-repeat;
     background-position: center center;
@@ -21,7 +21,7 @@
 }
 
 .active {
-	background-image: url(../../../img/imp.png);
+	background-image: url(../img/imp.png);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
