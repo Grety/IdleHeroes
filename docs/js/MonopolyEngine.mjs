@@ -1,16 +1,5 @@
-const randomInt = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
-
-const checkRandomIntIsUniform = () => {
-	const rng = {};
-	const ROUNDS = 100000;
-	for (let i = 0; i < ROUNDS; i++) {
-		const n = randomInt(1, 6);
-		rng[n] = (rng[n] || 0) + 1;
-	}
-	Object.entries(rng).forEach(([n, amount]) => {
-		console.log(`${n}:\t${amount / ROUNDS}`);
-	});
-};
+import randomInt from './randomInt.mjs';
+import { FREE_DICES } from './constants.mjs';
 
 class MonopolyEngine {
 
@@ -46,7 +35,14 @@ class MonopolyEngine {
 	reset() {
 		this.effect = Effect.NONE;
 		this.position = -1;
+		this.lastStep = '';
 		this.resources = this.field.reduce((acc, tile) => Object.assign(acc, { [tile.name]: 0 }), {});
+	}
+
+	start() {
+		this.reset();
+		this.resources['Dice'] = FREE_DICES;
+		// this.resources['Lucky Dice'] = 4;
 	}
 
 	/**
@@ -73,8 +69,11 @@ class MonopolyEngine {
 
 	/** @param {RewardTile} tile */
 	addReward(tile) {
-		if (typeof tile.getReward === 'function')
-			this.resources[tile.name] += tile.getReward();
+		if (typeof tile.getReward === 'function') {
+			const coef = this.effect === Effect.DOUBLE_STARS && tile.name === 'Stars' ?
+				2 : 1;
+			this.resources[tile.name] += coef * tile.getReward();
+		}
 	}
 
 	/** @param {number} */
@@ -91,9 +90,35 @@ class MonopolyEngine {
 		let dicesLeft = this.resources['Dice'];
 		let luckyDicesLeft = this.resources['Lucky Dice'];
 		const useLuckyDice = luckyDicesLeft && strategy.useLucky(dicesLeft, luckyDicesLeft, this.position, this.field, this.effect);
-		let nextStep = useLuckyDice ?
-			strategy.rollLucky(dicesLeft, luckyDicesLeft, this.position, this.field, this.effect) :
-			this.rollDice();
+		let nextStep = useLuckyDice &&
+			strategy.rollLucky(dicesLeft, luckyDicesLeft, this.position, this.field, this.effect);
+
+		const canContinue = this.step(nextStep);
+
+		if (verbose)
+			console.log([
+				`Tile[${this.position}]: ${landedOn.name.padString(17, ' ')}`,
+				`usedLucky: ${useLuckyDice};`,
+				`stepped: ${nextStep};`,
+				`Dices: ${dicesLeft}, ${luckyDicesLeft};`,
+				`Effect: ${this.effect};`,
+				`Stars: ${this.resources['Stars']}`
+			].join('\t'));
+
+		return canContinue;
+	}
+
+	step(nextStep) {
+		let dicesLeft = this.resources['Dice'];
+		let luckyDicesLeft = this.resources['Lucky Dice'];
+
+		if ((dicesLeft <= 0 && !nextStep) || (luckyDicesLeft <= 0 && !!nextStep)) {
+			return 0;
+		}
+
+		const useLuckyDice = Boolean(nextStep);
+		if (!nextStep)
+			nextStep = this.rollDice();
 
 		if (this.effect === Effect.COPYCAT || this.effect === Effect.DOUBLE_ROLL)
 			nextStep *= 2;
@@ -104,13 +129,15 @@ class MonopolyEngine {
 		else {
 
 			// collect Stars when passing Mushrooms
-			for (let pointer = this.position + 1; pointer < this.position + nextStep - 1; pointer++) {
+			for (let pointer = this.position + 1; pointer < this.position + nextStep; pointer++) {
 				const passing = this.field[pointer % this.field.length];
 				if (passing.name === 'Stars')
 					this.addReward(passing);
 			}
 			this.position = (this.position + nextStep) % this.field.length;
 		}
+
+		this.lastStep = nextStep;
 
 		const landedOn = this.field[this.position];
 
@@ -134,16 +161,6 @@ class MonopolyEngine {
 			this.resources['Lucky Dice'] = --luckyDicesLeft;
 		else
 			this.resources['Dice'] = --dicesLeft;
-
-		if (verbose)
-			console.log([
-				`Tile[${this.position}]: ${landedOn.name.padString(17, ' ')}`,
-				`usedLucky: ${useLuckyDice};`,
-				`stepped: ${nextStep};`,
-				`Dices: ${dicesLeft}, ${luckyDicesLeft};`,
-				`Effect: ${this.effect};`,
-				`Stars: ${this.resources['Stars']}`
-			].join('\t'));
 
 		return luckyDicesLeft > 0 || dicesLeft > 0; // report if we can continue to move
 	}

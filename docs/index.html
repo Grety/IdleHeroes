@@ -9,7 +9,8 @@
 	<body>
 		<h1>Idle Heroes Easter 2020</h1>
 		<h2>Monopoly Simulator</h2>
-		<h3>v0.0.1</h3>
+		<h3>v0.0.2</h3>
+		<h4></h><i>Press numbers under dices to make a move</i></h4>
 		<table id="field">
 			<tr>
 				<td id="tile-1"></td>
@@ -18,7 +19,7 @@
 				<td id="tile4"></td>
 				<td id="tile5"></td>
 				<td></td>
-				<td></td>
+				<td><div id="stars" class="dices-tile">0</div></td>
 			</tr>
 			<tr>
 				<td id="tile0"></td>
@@ -42,7 +43,7 @@
 				<td id="tile18"></td>
 				<td></td>
 				<td><div id="dices" class="dices-tile">78</div></td>
-				<td></td>
+				<td><div id="lastStep" class="dices-tile"></div></td>
 				<td><div id="luckyDices" class="dices-tile">0</div></td>
 				<td></td>
 				<td id="tile10"></td>
@@ -61,5 +62,7 @@
 			<button id="test" onClick="test_onClick()">Random position</button>
 			<button id="grid_highlight" onClick="grid_onClick()">Toggle Grid</button>
 		</div>
+		<h3 style="color: white" id="effect"></h3>
+		<pre id="resources"></pre>
 	</body>
 </html>

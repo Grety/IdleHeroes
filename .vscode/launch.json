@@ -7,7 +7,7 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Launch Program",
+			"name": "Simulate 100k runs and average accumulated Stars",
 			"runtimeArgs": [
                 "--experimental-modules",
             ],
@@ -15,6 +15,20 @@
 				"<node_internals>/**"
 			],
 			"program": "${workspaceFolder}/docs/js/monopoly.mjs",
+			"console": "integratedTerminal"
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Local Simulator",
+			"cwd": "${workspaceRoot}/docs",
+			"runtimeArgs": [
+                "--experimental-modules",
+            ],
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"program": "${workspaceFolder}/docs/js/server.js",
 			"console": "integratedTerminal"
 		}
 	]

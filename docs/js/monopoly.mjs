@@ -1,8 +1,27 @@
 'use strict';
 
-import { MonopolyEngine, ReplicateDiceStrategy } from './MonopolyEngine';
+import {
+	MonopolyEngine,
+	ReplicateDiceStrategy,
+	ReplicateDiceWhenFarEnoughStrategy,
+	UseLuckyDiceAtOnceStrategy
+} from './MonopolyEngine';
 
-const FREE_DICES = 78;
+import randomInt from './randomInt';
+
+import { FREE_DICES } from './constants';
+
+const checkRandomIntIsUniform = () => {
+	const rng = {};
+	const ROUNDS = 100000;
+	for (let i = 0; i < ROUNDS; i++) {
+		const n = randomInt(1, 6);
+		rng[n] = (rng[n] || 0) + 1;
+	}
+	Object.entries(rng).forEach(([n, amount]) => {
+		console.log(`${n}:\t${amount / ROUNDS}`);
+	});
+};
 
 const main = () => {
 	const avResults = {};
