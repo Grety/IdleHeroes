@@ -1,5 +1,3 @@
-'use strict';
-
 const randomInt = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
 
 const checkRandomIntIsUniform = () => {
@@ -13,100 +11,6 @@ const checkRandomIntIsUniform = () => {
 		console.log(`${n}:\t${amount / ROUNDS}`);
 	});
 };
-
-const FREE_DICES = 78;
-
-const main = () => {
-	const avResults = {};
-	const minResults = {};
-	const maxResults = {};
-	const engine = new MonopolyEngine();
-
-	const N = 100000;
-	const verbose = 0; // Flags: 1 - results of each run, 2 - steps of each run
-	for (let i = 0; i < N; i++) {
-		engine.play(FREE_DICES, new ReplicateDiceStrategy(), verbose);
-		// engine.Play(FREE_DICES, new ReplicateDiceWhenFarEnoughStrategy(), verbose);
-		// engine.Play(FREE_DICES, new UseLuckyDiceAtOnceStrategy(), verbose);
-
-		mergeMaps(avResults, engine.resources, (a = 0, b = 0) => a + b); // sum
-		mergeMaps(minResults, engine.resources, (a = Number.MAX_SAFE_INTEGER, b) => a > b ? b : a); // min
-		mergeMaps(maxResults, engine.resources, (a = 0, b) => a < b ? b : a); // max
-	}
-
-	for (const key of Object.keys(avResults))
-		avResults[key] = Math.round(avResults[key] / N);
-
-	printMap(avResults, '\nAverage resources:', ['Stars']);
-	printMap(minResults, '\nMin resources:', ['Stars']);
-	printMap(maxResults, '\nMax resources:', ['Stars']);
-};
-
-class Tile {
-
-	/** @param {string} rewardName */
-	constructor(rewardName) {
-		this.name = rewardName;
-	}
-
-	getReward() { return 1; }
-	upgrade() { }
-	downgrade() { }
-	getEffect() { return Effect.NONE; }
-}
-
-class RewardTile extends Tile {
-
-	/**
-	 * @param {string} rewardName
-	 * @param {number[]} rewardAmounts
-	 */
-	constructor(rewardName, rewardAmounts) {
-		super(rewardName);
-		this.amounts = rewardAmounts;
-		this.level = 0;
-	}
-
-	/** @returns {number} */
-	getReward() {
-		return this.amounts[this.level];
-	}
-
-	upgrade() {
-		if (this.level < this.amounts.length - 1)
-			this.level += 1;
-	}
-
-	downgrade() {
-		if (this.level > 0)
-			this.level -= 1;
-	}
-}
-
-class KarmaTile extends Tile {
-	constructor() {
-		super('Karma');
-	}
-
-	/** @returns {TEffect} */
-	getEffect() {
-		return Effect.KARMA;
-	}
-}
-
-class TarotTile extends Tile {
-	constructor() {
-		super('Tarot Hut');
-	}
-
-	/** @returns {TEffect} */
-	getEffect() {
-		const allTarotEffects = Object.values(Effect).filter(e => e !== 'NONE' && e !== 'KARMA');
-		const effectIdx = randomInt(0, allTarotEffects.length - 1);
-
-		return allTarotEffects[effectIdx];
-	}
-}
 
 class MonopolyEngine {
 
@@ -258,6 +162,72 @@ class MonopolyEngine {
 			return;
 		const idx = randomInt(0, upgraded.length - 1);
 		upgraded[idx].downgrade();
+	}
+}
+
+class Tile {
+
+	/** @param {string} rewardName */
+	constructor(rewardName) {
+		this.name = rewardName;
+	}
+
+	getReward() { return 1; }
+	upgrade() { }
+	downgrade() { }
+	getEffect() { return Effect.NONE; }
+}
+
+class RewardTile extends Tile {
+
+	/**
+	 * @param {string} rewardName
+	 * @param {number[]} rewardAmounts
+	 */
+	constructor(rewardName, rewardAmounts) {
+		super(rewardName);
+		this.amounts = rewardAmounts;
+		this.level = 0;
+	}
+
+	/** @returns {number} */
+	getReward() {
+		return this.amounts[this.level];
+	}
+
+	upgrade() {
+		if (this.level < this.amounts.length - 1)
+			this.level += 1;
+	}
+
+	downgrade() {
+		if (this.level > 0)
+			this.level -= 1;
+	}
+}
+
+class KarmaTile extends Tile {
+	constructor() {
+		super('Karma');
+	}
+
+	/** @returns {TEffect} */
+	getEffect() {
+		return Effect.KARMA;
+	}
+}
+
+class TarotTile extends Tile {
+	constructor() {
+		super('Tarot Hut');
+	}
+
+	/** @returns {TEffect} */
+	getEffect() {
+		const allTarotEffects = Object.values(Effect).filter(e => e !== 'NONE' && e !== 'KARMA');
+		const effectIdx = randomInt(0, allTarotEffects.length - 1);
+
+		return allTarotEffects[effectIdx];
 	}
 }
 
@@ -424,31 +394,9 @@ class UseLuckyDiceAtOnceStrategy {
  * @member {(dices: number, luckyDices: number, position: number, field: Tile[], effect: Effect) => number} rollLucky
  */
 
-/**
- *
- * @param {{ [key: string]: number }} a
- * @param {{ [key: string]: number }} b
- * @param {(number, number) => number} predicate
- */
-const mergeMaps = (a, b, predicate) => {
-	Object.entries(b).forEach(([key, bValue]) => {
-		a[key] = predicate(a[key], bValue);
-	});
+export {
+	MonopolyEngine,
+	UseLuckyDiceAtOnceStrategy,
+	ReplicateDiceStrategy,
+	ReplicateDiceWhenFarEnoughStrategy
 };
-
-/**
- * @param {{ [key: string]: number }} map
- * @param {string} [title]
- * @param {string[]} [keysOnly]
- */
-const printMap = (map, title, keysOnly = []) => {
-	if (title)
-		console.log(title);
-
-	Object.entries(map).forEach(([key, value]) => {
-		if (!keysOnly || keysOnly.includes(key))
-			console.log(key + ': ' + value);
-	});
-};
-
-main();

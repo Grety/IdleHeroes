@@ -1,4 +1,5 @@
 #field {
+	table-layout: fixed;
 	background-image: url("../img/field.png");
 	background-size:     cover;
     background-repeat:   no-repeat;
@@ -42,4 +43,21 @@
 
 td.active:after {
 	opacity: 1 !important;
+}
+
+.dices-tile {
+	text-align: center;
+	vertical-align: middle;
+	font-family: sans-serif;
+	font-size: 34px;
+	color: white;
+	cursor: hand;
+	z-index: 1;
+
+	position: absolute;
+
+	margin: auto;
+    left: 0;
+    right: 0;
+    bottom: 20px;
 }

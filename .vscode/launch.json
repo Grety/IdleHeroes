@@ -8,10 +8,13 @@
 			"type": "node",
 			"request": "launch",
 			"name": "Launch Program",
+			"runtimeArgs": [
+                "--experimental-modules",
+            ],
 			"skipFiles": [
 				"<node_internals>/**"
 			],
-			"program": "${workspaceFolder}/src/Monopoly/js/monopoly.js",
+			"program": "${workspaceFolder}/docs/js/monopoly.mjs",
 			"console": "integratedTerminal"
 		}
 	]

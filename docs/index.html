@@ -3,7 +3,8 @@
 		<link rel="shortcut icon" href="http://sstatic.net/stackoverflow/img/favicon.ico">
 		<link rel="stylesheet" href="./css/main.css" />
 		<link rel="stylesheet" href="./css/field.css" />
-		<script src="./js/simulator.js"></script>
+		<script src="./js/devToolbar.js"></script>
+		<script type="module" src="./js/simulator.js"></script>
 	</head>
 	<body>
 		<h1>Idle Heroes Easter 2020</h1>
@@ -40,9 +41,9 @@
 			<tr>
 				<td id="tile18"></td>
 				<td></td>
+				<td><div id="dices" class="dices-tile">78</div></td>
 				<td></td>
-				<td></td>
-				<td></td>
+				<td><div id="luckyDices" class="dices-tile">0</div></td>
 				<td></td>
 				<td id="tile10"></td>
 			</tr>
@@ -56,7 +57,7 @@
 				<td id="tile11"></td>
 			</tr>
 		</table>
-		<div id="dev-toolbar">
+		<div id="dev-toolbar" class="hidden">
 			<button id="test" onClick="test_onClick()">Random position</button>
 			<button id="grid_highlight" onClick="grid_onClick()">Toggle Grid</button>
 		</div>
