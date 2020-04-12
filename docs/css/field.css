@@ -20,9 +20,16 @@
     border: 3px solid white;
 }
 
-.active {
+#field td {
+	-webkit-transition: opacity 0.3s ease-in-out;
+	transition: opacity 0.3s ease-in-out;
 	background-image: url(../img/imp.png);
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center center;
+	background-position: center center;
+	opacity: 0;
+}
+
+.active {
+	opacity: 1 !important;
 }
