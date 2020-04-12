@@ -1,69 +1,90 @@
 <html>
-	<head>
-		<title>Easter 2020 Monopoly Online Simulator</title>
-		<link rel="shortcut icon" href="./img/favicon.ico">
-		<link rel="stylesheet" href="./css/main.css" />
-		<link rel="stylesheet" href="./css/field.css" />
-		<script src="./js/devToolbar.js"></script>
-		<script type="module" src="./js/simulator.js"></script>
-	</head>
-	<body>
-		<h1>Idle Heroes Easter 2020</h1>
-		<h2>Monopoly Simulator</h2>
-		<h3>v0.0.2</h3>
-		<h4></h><i>Press numbers under dices to make a move</i></h4>
-		<table id="field">
-			<tr>
-				<td id="tile-1"></td>
-				<td></td>
-				<td id="tile3"></td>
-				<td id="tile4"></td>
-				<td id="tile5"></td>
-				<td></td>
-				<td><div id="stars" class="dices-tile">0</div></td>
-			</tr>
-			<tr>
-				<td id="tile0"></td>
-				<td id="tile1"></td>
-				<td id="tile2"></td>
-				<td></td>
-				<td id="tile6"></td>
-				<td id="tile7"></td>
-				<td id="tile8"></td>
-			</tr>
-			<tr>
-				<td id="tile19"></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td id="tile9"></td>
-			</tr>
-			<tr>
-				<td id="tile18"></td>
-				<td></td>
-				<td><div id="dices" class="dices-tile">78</div></td>
-				<td><div id="lastStep" class="dices-tile"></div></td>
-				<td><div id="luckyDices" class="dices-tile">0</div></td>
-				<td></td>
-				<td id="tile10"></td>
-			</tr>
-			<tr>
-				<td id="tile17"></td>
-				<td id="tile16"></td>
-				<td id="tile15"></td>
-				<td id="tile14"></td>
-				<td id="tile13"></td>
-				<td id="tile12"></td>
-				<td id="tile11"></td>
-			</tr>
-		</table>
-		<div id="dev-toolbar" class="hidden">
-			<button id="test" onClick="test_onClick()">Random position</button>
-			<button id="grid_highlight" onClick="grid_onClick()">Toggle Grid</button>
-		</div>
-		<h3 style="color: white" id="effect"></h3>
-		<pre id="resources"></pre>
-	</body>
+
+<head>
+	<title>Easter 2020 Monopoly Online Simulator</title>
+	<link rel="shortcut icon" href="./img/favicon.ico">
+	<link rel="stylesheet" href="./css/main.css" />
+	<link rel="stylesheet" href="./css/field.css" />
+	<script src="./js/devToolbar.js"></script>
+	<script type="module" src="./js/simulator.js"></script>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-163395813-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+
+		gtag('config', 'UA-163395813-1');
+	</script>
+</head>
+
+<body>
+	<h1>Idle Heroes Easter 2020</h1>
+	<h2>Monopoly Simulator</h2>
+	<h3>v0.0.2</h3>
+	<h4>
+		</h><i>Press numbers under dices to make a move</i></h4>
+	<table id="field">
+		<tr>
+			<td id="tile-1"></td>
+			<td></td>
+			<td id="tile3"></td>
+			<td id="tile4"></td>
+			<td id="tile5"></td>
+			<td></td>
+			<td>
+				<div id="stars" class="dices-tile">0</div>
+			</td>
+		</tr>
+		<tr>
+			<td id="tile0"></td>
+			<td id="tile1"></td>
+			<td id="tile2"></td>
+			<td></td>
+			<td id="tile6"></td>
+			<td id="tile7"></td>
+			<td id="tile8"></td>
+		</tr>
+		<tr>
+			<td id="tile19"></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td id="tile9"></td>
+		</tr>
+		<tr>
+			<td id="tile18"></td>
+			<td></td>
+			<td>
+				<div id="dices" class="dices-tile">78</div>
+			</td>
+			<td>
+				<div id="lastStep" class="dices-tile"></div>
+			</td>
+			<td>
+				<div id="luckyDices" class="dices-tile">0</div>
+			</td>
+			<td></td>
+			<td id="tile10"></td>
+		</tr>
+		<tr>
+			<td id="tile17"></td>
+			<td id="tile16"></td>
+			<td id="tile15"></td>
+			<td id="tile14"></td>
+			<td id="tile13"></td>
+			<td id="tile12"></td>
+			<td id="tile11"></td>
+		</tr>
+	</table>
+	<div id="dev-toolbar" class="hidden">
+		<button id="test" onClick="test_onClick()">Random position</button>
+		<button id="grid_highlight" onClick="grid_onClick()">Toggle Grid</button>
+	</div>
+	<h3 style="color: white" id="effect"></h3>
+	<pre id="resources"></pre>
+</body>
+
 </html>

@@ -1,5 +1,14 @@
 import { MonopolyEngine } from "./MonopolyEngine.mjs";
 
+function track(eventName) {
+	try {
+		gtag('event', eventName);
+	}
+	catch (e) {
+		console.error(e);
+	}
+}
+
 const LUCKY_DICES = 'Lucky Dice';
 const DICES = 'Dice';
 const STARS = 'Stars';
@@ -71,6 +80,8 @@ const onNormalDice_Click = () => {
 		engine.step();
 	}
 	refreshUi();
+
+	track('Normal Dice');
 }
 
 const onLuckyDice_Click = () => {
@@ -86,6 +97,8 @@ const onLuckyDice_Click = () => {
 
 	engine.step(Number(nextStep));
 	refreshUi();
+
+	track('Lucky Dice');
 };
 
 indicatorDices.onclick = onNormalDice_Click;
