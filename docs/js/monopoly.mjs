@@ -8,6 +8,7 @@ import {
 } from './MonopolyEngine';
 
 import randomInt from './randomInt';
+import printMap from './printMap';
 
 import { FREE_DICES } from './constants';
 
@@ -29,12 +30,12 @@ const main = () => {
 	const maxResults = {};
 	const engine = new MonopolyEngine();
 
-	const N = 100000;
-	const verbose = 0; // Flags: 1 - results of each run, 2 - steps of each run
+	const N = 10;
+	const verbose = 2; // Flags: 1 - results of each run, 2 - steps of each run
 	for (let i = 0; i < N; i++) {
 		engine.play(FREE_DICES, new ReplicateDiceStrategy(), verbose);
-		// engine.Play(FREE_DICES, new ReplicateDiceWhenFarEnoughStrategy(), verbose);
-		// engine.Play(FREE_DICES, new UseLuckyDiceAtOnceStrategy(), verbose);
+		// engine.play(FREE_DICES, new ReplicateDiceWhenFarEnoughStrategy(), verbose);
+		// engine.play(FREE_DICES, new UseLuckyDiceAtOnceStrategy(), verbose);
 
 		mergeMaps(avResults, engine.resources, (a = 0, b = 0) => a + b); // sum
 		mergeMaps(minResults, engine.resources, (a = Number.MAX_SAFE_INTEGER, b) => a > b ? b : a); // min
@@ -59,22 +60,6 @@ const main = () => {
 const mergeMaps = (a, b, predicate) => {
 	Object.entries(b).forEach(([key, bValue]) => {
 		a[key] = predicate(a[key], bValue);
-	});
-};
-
-
-/**
- * @param {{ [key: string]: number }} map
- * @param {string} [title]
- * @param {string[]} [keysOnly]
- */
-const printMap = (map, title, keysOnly = []) => {
-	if (title)
-		console.log(title);
-
-	Object.entries(map).forEach(([key, value]) => {
-		if (!keysOnly || keysOnly.includes(key))
-			console.log(key + ': ' + value);
 	});
 };
 

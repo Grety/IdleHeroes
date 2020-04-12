@@ -1,34 +1,35 @@
 import randomInt from './randomInt.mjs';
 import { FREE_DICES } from './constants.mjs';
+import printMap from './printMap.mjs';
+
+const TILE_NAME_PRINT_WIDTH = 17;
+
+const recreateField = () => ([
+	new RewardTile('Spirit', [650000, 1300000, 2000000]),
+	new RewardTile('Promotion Stones', [500, 1000, 1500]),
+	new RewardTile('Magic Dust', [500, 1000, 1500]),
+	new RewardTile('Stars', [3, 4, 5]),
+	new Tile('Dice'),
+	new RewardTile('3-star shards', [20, 40, 60]),
+	new RewardTile('Spirit', [650000, 1300000, 2000000]),
+	new RewardTile('Monster Souls', [500, 1000, 1500]),
+	new RewardTile('Magic Dust', [500, 100, 1500]),
+	new TarotTile(),
+	new RewardTile('Stars', [3, 4, 5]),
+	new RewardTile('Promotion Stones', [500, 1000, 1500]),
+	new RewardTile('5-star shards', [10, 20, 30]),
+	new RewardTile('Spirit', [650000, 1300000, 2000000]),
+	new KarmaTile(),
+	new RewardTile('Magic Dust', [500, 1000, 1500]),
+	new RewardTile('4-star shards', [10, 20, 30]),
+	new RewardTile('Stars', [3, 4, 5]),
+	new RewardTile('Chaos Stones', [100, 200, 300]),
+	new Tile('Lucky Dice')
+]);
 
 class MonopolyEngine {
 
 	constructor() {
-		this.field = [];
-
-		this.field = [
-			new RewardTile('Spirit', [650000, 1300000, 2000000]),
-			new RewardTile('Promotion Stones', [500, 1000, 1500]),
-			new RewardTile('Magic Dust', [500, 1000, 1500]),
-			new RewardTile('Stars', [3, 4, 5]),
-			new Tile('Dice'),
-			new RewardTile('3-star shards', [20, 40, 60]),
-			new RewardTile('Spirit', [650000, 1300000, 2000000]),
-			new RewardTile('Monster Souls', [500, 1000, 1500]),
-			new RewardTile('Magic Dust', [500, 100, 1500]),
-			new TarotTile(),
-			new RewardTile('Stars', [3, 4, 5]),
-			new RewardTile('Promotion Stones', [500, 1000, 1500]),
-			new RewardTile('5-star shards', [10, 20, 30]),
-			new RewardTile('Spirit', [650000, 1300000, 2000000]),
-			new KarmaTile(),
-			new RewardTile('Magic Dust', [500, 1000, 1500]),
-			new RewardTile('4-star shards', [10, 20, 30]),
-			new RewardTile('Stars', [3, 4, 5]),
-			new RewardTile('Chaos Stones', [100, 200, 300]),
-			new Tile('Lucky Dice')
-		];
-
 		this.reset();
 	}
 
@@ -36,6 +37,7 @@ class MonopolyEngine {
 		this.effect = Effect.NONE;
 		this.position = -1;
 		this.lastStep = '';
+		this.field = recreateField();
 		this.resources = this.field.reduce((acc, tile) => Object.assign(acc, { [tile.name]: 0 }), {});
 	}
 
@@ -89,17 +91,19 @@ class MonopolyEngine {
 	move(strategy, verbose) {
 		let dicesLeft = this.resources['Dice'];
 		let luckyDicesLeft = this.resources['Lucky Dice'];
-		const useLuckyDice = luckyDicesLeft && strategy.useLucky(dicesLeft, luckyDicesLeft, this.position, this.field, this.effect);
+		const useLuckyDice = Boolean(luckyDicesLeft && strategy.useLucky(dicesLeft, luckyDicesLeft, this.position, this.field, this.effect));
 		let nextStep = useLuckyDice &&
 			strategy.rollLucky(dicesLeft, luckyDicesLeft, this.position, this.field, this.effect);
 
 		const canContinue = this.step(nextStep);
 
+		const landedOn = this.field[this.position];
+
 		if (verbose)
 			console.log([
-				`Tile[${this.position}]: ${landedOn.name.padString(17, ' ')}`,
+				`Tile[${this.position}]: ${landedOn ? landedOn.toString() : 'start'.padStart(TILE_NAME_PRINT_WIDTH, ' ')}`,
 				`usedLucky: ${useLuckyDice};`,
-				`stepped: ${nextStep};`,
+				`stepped: ${this.lastStep};`,
 				`Dices: ${dicesLeft}, ${luckyDicesLeft};`,
 				`Effect: ${this.effect};`,
 				`Stars: ${this.resources['Stars']}`
@@ -190,6 +194,7 @@ class Tile {
 	}
 
 	getReward() { return 1; }
+	toString() { return this.name.padStart(TILE_NAME_PRINT_WIDTH, ' '); }
 	upgrade() { }
 	downgrade() { }
 	getEffect() { return Effect.NONE; }
@@ -206,6 +211,8 @@ class RewardTile extends Tile {
 		this.amounts = rewardAmounts;
 		this.level = 0;
 	}
+
+	toString() { return `${this.name}[${this.level + 1}]`.padStart(TILE_NAME_PRINT_WIDTH, ' '); }
 
 	/** @returns {number} */
 	getReward() {
