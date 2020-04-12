@@ -21,6 +21,16 @@
 }
 
 #field td {
+	position: relative;
+}
+#field td:after {
+	content : "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 	-webkit-transition: opacity 0.3s ease-in-out;
 	transition: opacity 0.3s ease-in-out;
 	background-image: url(../img/imp.png);
@@ -30,6 +40,6 @@
 	opacity: 0;
 }
 
-.active {
+td.active:after {
 	opacity: 1 !important;
 }
