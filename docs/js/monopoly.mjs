@@ -1,11 +1,14 @@
 'use strict';
 
 import {
-	MonopolyEngine,
-	ReplicateDiceStrategy,
-	ReplicateDiceWhenFarEnoughStrategy,
-	UseLuckyDiceAtOnceStrategy
+	MonopolyEngine
 } from './MonopolyEngine';
+
+import {
+	UseLuckyDiceAtOnceStrategy,
+	ReplicateDiceStrategy,
+	ReplicateDiceWhenFarEnoughStrategy
+} from './Strategies.mjs';
 
 import randomInt from './randomInt';
 import printMap from './printMap';
@@ -34,7 +37,7 @@ const main = () => {
 	const verbose = 0; // Flags: 1 - results of each run, 2 - steps of each run
 	for (let i = 0; i < N; i++) {
 		engine.play(FREE_DICES, new ReplicateDiceStrategy(), verbose);
-		// engine.play(FREE_DICES, new ReplicateDiceWhenFarEnoughStrategy(), verbose);
+		// engine.play(FREE_DICES, new ReplicateDiceWhenFarEnoughStrategy(1), verbose);
 		// engine.play(FREE_DICES, new UseLuckyDiceAtOnceStrategy(), verbose);
 
 		mergeMaps(avResults, engine.resources, (a = 0, b = 0) => a + b); // sum
