@@ -1,0 +1,8 @@
+
+2020-04-13 0.0.4
+Fixed bug: when returning back from Karma to Tarot the latter must not cause effect. Reported by /u/Geedeepee91
+Feature: levels now are displayed on tiles
+Improved: numbers layouts
+
+2020-04-12 0.0.3
+Fixed bug: Resources (including Stars) picked if moved backwards and tile upgraded when moving backwards. Reported by /u/junn3 and /u/Geedeepee91

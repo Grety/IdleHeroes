@@ -149,10 +149,10 @@ class MonopolyEngine {
 		if (this.effect !== Effect.EAT_RESOURCES && nextStep > 0)
 			this.addReward(landedOn);
 
-		if (nextStep > 0) //don't upgrade on moving back
+		if (nextStep > 0) //don't upgrade or cause effect on moving back
 			landedOn.upgrade();
 
-		this.effect = landedOn.getEffect();
+		this.effect = nextStep > 0 ? landedOn.getEffect() : Effect.NONE;
 
 		// immediate effects
 		if (this.effect === Effect.UPGRADE) this.upgradeRandomReward();

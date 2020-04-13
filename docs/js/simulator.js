@@ -29,6 +29,7 @@ const refreshUi = () => {
 	displayResources();
 	displayStars();
 	displayEffect();
+	displayLevels(engine.field);
 };
 
 const displayResources = () => {
@@ -63,6 +64,23 @@ const displayDices = () => {
 
 const displayStars = () => {
 	indicatorStars.innerText = engine.resources[STARS];
+}
+
+const displayLevels = field => {
+	field.forEach((tile, index) => {
+		if ('level' in tile) {
+			const td = document.getElementById(`tile${index}`);
+			const div = td.getElementsByClassName('tile-level', td)[0];
+			if (div)
+				div.innerText = `LV: ${tile.level + 1}`;
+		}
+		if (typeof tile.getReward === 'function') {
+			const td = document.getElementById(`tile${index}`);
+			const div = td.getElementsByClassName('tile-reward', td)[0];
+			if (div)
+				div.innerText = tile.getReward();
+		}
+	});
 }
 
 const onRestart_Click = () => {

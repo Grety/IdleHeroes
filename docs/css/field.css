@@ -62,6 +62,52 @@ td.active:after {
     bottom: 20px;
 }
 
+.tile-level {
+	text-align: left;
+	vertical-align: top;
+	font-family: sans-serif;
+	font-size: 24px;
+	font-weight: bold;
+	color: white;
+	cursor: hand;
+	z-index: 1;
+	position: absolute;
+	margin: auto;
+    left: 5px;
+    right: 0;
+    top: 0;
+}
+
+.tile-reward {
+	text-align: center;
+	vertical-align: bottom;
+	font-family: sans-serif;
+	font-size: 24px;
+	font-weight: bold;
+	color: white;
+	cursor: hand;
+	z-index: 1;
+	position: absolute;
+	margin: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.stars-count {
+	text-align: left;
+	vertical-align: middle;
+	font-family: sans-serif;
+	font-size: 50px;
+	font-weight: bold;
+	color: white;
+	position: absolute;
+	margin: auto;
+    left: 0;
+    right: 0;
+    bottom: 20px;
+}
+
 #resources {
 	width: 200px;
     margin-left: auto;
