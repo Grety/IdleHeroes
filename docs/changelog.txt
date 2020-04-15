@@ -1,3 +1,6 @@
+2020-04-15 0.2.1
+Fix: fix histogram width and position
+
 2020-04-15 0.2.0
 Feature: added histogram of dices rolled during one game run
 
