@@ -128,7 +128,7 @@ class MonopolyEngine {
 			nextStep *= 2;
 
 		if ((this.effect === Effect.KARMA && (nextStep % 2 === 1)) || (this.effect === Effect.MOVE_BACK)) {
-			this.position = (this.position - nextStep) % this.field.length; // step back without collecting or upgrading
+			this.position = (this.position - nextStep + this.field.length) % this.field.length; // step back without collecting or upgrading
 			nextStep = -nextStep;
 		}
 		else {

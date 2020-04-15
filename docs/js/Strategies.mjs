@@ -112,7 +112,7 @@ class ReplicateDiceStrategy {
 	}
 
 	canReachDiceHut(position) {
-		return position >= 0 && position < 4;
+		return (position >= 0 && position < 4) || position == 19;
 	}
 
 	/**
@@ -127,7 +127,7 @@ class ReplicateDiceStrategy {
 			if (this.canReachLuckyHut(position))
 				return 19 - position;
 			if (this.canReachDiceHut(position))
-				return 4 - position;
+				return (4 - position + field.length) % field.length;
 			return 6;
 		}
 
