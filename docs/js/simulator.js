@@ -84,6 +84,7 @@ btnEditProperties.onclick = () => {
 };
 
 const diceRolls = [];
+const positionHistory = [];
 
 const refreshUi = () => {
 	displayDices();
@@ -94,6 +95,7 @@ const refreshUi = () => {
 	displayEffect();
 	displayLevels(engine.field);
 	displayDiceStatistics(diceRolls);
+	displayTilesStatistics(positionHistory);
 };
 
 const displayResources = () => {
@@ -166,6 +168,25 @@ const displayDiceStatistics = (lastStepData) => {
 	chart.draw(dataTable, options);
 };
 
+const displayTilesStatistics = (tilesHitData) => {
+	if (!tilesHitData.length)
+		return;
+	if (!chartsInitialized) {
+		document.getElementById('tiles_statistics').innerText = 'Google Charts not loaded yet';
+		return;
+	}
+	const dataTable = google.visualization.arrayToDataTable([
+		['Roll', 'Position'],
+		...tilesHitData.map(position => [, position])
+	])
+	const options = {
+		title: 'Position histogram of your latest run',
+		legend: { position: 'none' },
+	};
+	const chart = new google.visualization.Histogram(document.getElementById('tiles_statistics'));
+	chart.draw(dataTable, options);
+};
+
 const onRestart_Click = () => {
 	engine.reset();
 	refreshUi();
@@ -177,11 +198,13 @@ const onNormalDice_Click = () => {
 	if (!dicesLeft && !luckyDicesLeft) {
 		engine.reset();
 		diceRolls.length = 0;
+		positionHistory.length = 0;
 	}
 	else {
 		engine.step();
 		if (dicesLeft)
 			diceRolls.push(engine.lastDice);
+		positionHistory.push(engine.position);
 	}
 	refreshUi();
 
@@ -200,6 +223,7 @@ const onLuckyDice_Click = () => {
 		return;
 
 	engine.step(Number(nextStep));
+	positionHistory.push(engine.position);
 	refreshUi();
 
 	track('Lucky Dice');
@@ -213,5 +237,6 @@ document.body.onload = () => {
 	google.charts.load('current', { packages: ['corechart'] })
 	google.charts.setOnLoadCallback(() => {
 		chartsInitialized = true;
+		console.log('Google Charts initialized');
 	});
 };

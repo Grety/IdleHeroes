@@ -1,3 +1,6 @@
+2020-04-15 0.2.3
+Feature: add position historgram
+
 2020-04-15 0.2.2
 Fix: secure link to google Chart Api
 
