@@ -1,3 +1,6 @@
+2020-04-15 0.2.0
+Feature: added histogram of dices rolled during one game run
+
 2020-04-15 0.1.0
 Feature: allow edit current and startup properties of the simulation engine
 

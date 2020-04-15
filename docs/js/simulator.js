@@ -14,6 +14,7 @@ const DICES = 'Dice';
 const STARS = 'Stars';
 
 const engine = new MonopolyEngine();
+let chartsInitialized = false;
 
 const indicatorDices = document.getElementById('dices');
 const indicatorLuckyDices = document.getElementById('luckyDices');
@@ -82,6 +83,8 @@ btnEditProperties.onclick = () => {
 	displayEditableProperties(engine);
 };
 
+const diceRolls = [];
+
 const refreshUi = () => {
 	displayDices();
 	refreshPosition();
@@ -90,6 +93,7 @@ const refreshUi = () => {
 	displayStars();
 	displayEffect();
 	displayLevels(engine.field);
+	displayDiceStatistics(diceRolls);
 };
 
 const displayResources = () => {
@@ -143,6 +147,25 @@ const displayLevels = field => {
 	});
 }
 
+const displayDiceStatistics = (lastStepData) => {
+	if (!lastStepData.length)
+		return;
+	if (!chartsInitialized) {
+		document.getElementById('dice_statistics').innerText = 'Google Charts not loaded yet';
+		return;
+	}
+	const dataTable = google.visualization.arrayToDataTable([
+		['Roll', 'Dice number'],
+		...lastStepData.map(dice => [, dice - 1])
+	])
+	const options = {
+		title: 'Dice rolls histogram of your latest run',
+		legend: { position: 'none' },
+	};
+	const chart = new google.visualization.Histogram(document.getElementById('dice_statistics'));
+	chart.draw(dataTable, options);
+};
+
 const onRestart_Click = () => {
 	engine.reset();
 	refreshUi();
@@ -153,9 +176,12 @@ const onNormalDice_Click = () => {
 	const luckyDicesLeft = engine.resources[LUCKY_DICES];
 	if (!dicesLeft && !luckyDicesLeft) {
 		engine.reset();
+		diceRolls.length = 0;
 	}
 	else {
 		engine.step();
+		if (dicesLeft)
+			diceRolls.push(engine.lastDice);
 	}
 	refreshUi();
 
@@ -182,4 +208,10 @@ const onLuckyDice_Click = () => {
 indicatorDices.onclick = onNormalDice_Click;
 indicatorLuckyDices.onclick = onLuckyDice_Click;
 
-onRestart_Click();
+document.body.onload = () => {
+	onRestart_Click();
+	google.charts.load('current', { packages: ['corechart'] })
+	google.charts.setOnLoadCallback(() => {
+		chartsInitialized = true;
+	});
+};

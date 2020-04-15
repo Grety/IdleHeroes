@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="./css/field.css" />
 	<link rel="stylesheet" href="./css/modals.css" />
 	<script src="./js/devToolbar.js"></script>
+	<script type="text/javascript" src="http://www.gstatic.com/charts/loader.js"></script>
 	<script type="module" src="./js/simulator.js"></script>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-163395813-1"></script>
@@ -21,7 +22,7 @@
 <body>
 	<h1>Idle Heroes Easter 2020</h1>
 	<h2>Monopoly Simulator</h2>
-	<h3><a target="_blank" href="./changelog.txt">v0.1.0</a></v0.0.3>
+	<h3><a target="_blank" href="./changelog.txt">v0.2.0</a></v0.0.3>
 	</h3>
 	<h4><i>Press numbers under dices to make a move</i></h4>
 	<div class="text-center margin-bottom-sm">
@@ -123,18 +124,26 @@
 		<button id="grid_highlight" onClick="grid_onClick()">Toggle Grid</button>
 	</div>
 	<h3 style="color: white" id="effect"></h3>
+	<div id="dice_statistics" class="histogram"></div>
 	<pre id="resources"></pre>
 	<div id="dlgProperties" class="modal-dialog" style="display: none;">
 		<h3 class="current">This dialog allows you to edit simulator properties on the fly</h3>
 		<h3 class="startup">This dialog allows you to edit startup defaults to which simulator resets on gameover</h3>
 
-		<div class="margin-bottom-sm"><label for="txtDices">Dices: </label><input id="txtDices" value="" type="number" min="0" /></div>
-		<div class="margin-bottom-sm"><label for="txtLuckyDices">Lucky Dices: </label><input id="txtLuckyDices" value="" min="0" type="number" /></div>
-		<div class="margin-bottom-sm"><label for="txtPosition">Position: </label><input id="txtPosition" value="" max="19" min="-1" type="number" /></div>
-		<div class="margin-bottom-sm"><label for="txtStars">Stars: </label><input id="txtStars" value="" min="0" type="number" /></div>
-		<div class="margin-bottom-sm"><label>Mushroom level @ 03: </label><input id="txtMushroom-03" min="1" max="3" type="number" /></div>
-		<div class="margin-bottom-sm"><label>Mushroom level @ 10: </label><input id="txtMushroom-10" min="1" max="3" type="number" /></div>
-		<div class="margin-bottom-sm"><label>Mushroom level @ 17: </label><input id="txtMushroom-17" min="1" max="3" type="number" /></div>
+		<div class="margin-bottom-sm"><label for="txtDices">Dices: </label><input id="txtDices" value="" type="number"
+				min="0" /></div>
+		<div class="margin-bottom-sm"><label for="txtLuckyDices">Lucky Dices: </label><input id="txtLuckyDices" value=""
+				min="0" type="number" /></div>
+		<div class="margin-bottom-sm"><label for="txtPosition">Position: </label><input id="txtPosition" value=""
+				max="19" min="-1" type="number" /></div>
+		<div class="margin-bottom-sm"><label for="txtStars">Stars: </label><input id="txtStars" value="" min="0"
+				type="number" /></div>
+		<div class="margin-bottom-sm"><label>Mushroom level @ 03: </label><input id="txtMushroom-03" min="1" max="3"
+				type="number" /></div>
+		<div class="margin-bottom-sm"><label>Mushroom level @ 10: </label><input id="txtMushroom-10" min="1" max="3"
+				type="number" /></div>
+		<div class="margin-bottom-sm"><label>Mushroom level @ 17: </label><input id="txtMushroom-17" min="1" max="3"
+				type="number" /></div>
 
 		<div class="btn-toolbar">
 			<button id="btnSaveProperties">Save</button>

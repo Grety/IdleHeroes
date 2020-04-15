@@ -42,6 +42,7 @@ class MonopolyEngine {
 			effect: Effect.NONE,
 			position: -1,
 			lastStep: '',
+			lastDice: '',
 			field,
 			resources: field.reduce((acc, tile) => Object.assign(acc, { [tile.name]: 0 }), {})
 		};
@@ -53,6 +54,7 @@ class MonopolyEngine {
 		this.effect = this.defaults.effect;
 		this.position = this.defaults.position;
 		this.lastStep = this.defaults.lastStep;
+		this.lastDice = this.defaults.lastDice;
 		this.field = createField();
 		copyFieldLevels(this.field, this.defaults.field);
 		this.resources = Object.assign({}, this.defaults.resources);
@@ -134,6 +136,8 @@ class MonopolyEngine {
 		const useLuckyDice = Boolean(nextStep);
 		if (!nextStep)
 			nextStep = this.rollDice();
+
+		this.lastDice = nextStep;
 
 		if (this.effect === Effect.COPYCAT || this.effect === Effect.DOUBLE_ROLL)
 			nextStep *= 2;
