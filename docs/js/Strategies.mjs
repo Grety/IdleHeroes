@@ -97,14 +97,22 @@ class ReplicateDiceStrategy {
 		if (dices === 0)
 			return true;
 
-		if (position >= 13 && position < 19 && // if can reach Lucky Dice Hut in one roll
-			position !== 14) // but is not on Karma Hut
+		if (this.canReachLuckyHut(position))
 			return true;
 
 		if (effect === Effect.COPYCAT || effect === Effect.DOUBLE_ROLL) // standing on Tarot and got 2x tiles next roll
 			return true;
 
 		return false;
+	}
+
+	canReachLuckyHut(position) {
+		return position >= 13 && position < 19 && // if can reach Lucky Dice Hut in one roll
+			position !== 14; // but is not on Karma Hut
+	}
+
+	canReachDiceHut(position) {
+		return position >= 0 && position < 4;
 	}
 
 	/**
@@ -115,8 +123,13 @@ class ReplicateDiceStrategy {
 	 * @param {Effect} effect
 	 */
 	rollLucky(dices, luckyDices, position, field, effect) {
-		if (dices === 0)
+		if (dices === 0) {
+			if (this.canReachLuckyHut(position))
+				return 19 - position;
+			if (this.canReachDiceHut(position))
+				return 4 - position;
 			return 6;
+		}
 
 		if (effect === Effect.COPYCAT || effect === Effect.DOUBLE_ROLL)
 			return 5;
@@ -150,6 +163,31 @@ class UseLuckyDiceAtOnceStrategy {
 	}
 }
 
+/** @implements {IStrategy} */
+class UseLuckyDiceAtTheEndStrategy {
+	/**
+	 * @param {number} dices
+	 * @param {number} luckyDices
+	 * @param {number} position
+	 * @param {Tile[]} field
+	 * @param {Effect} effect
+	 */
+	useLucky(dices, luckyDices, position, field, effect) {
+		return dices === 0;
+	}
+
+	/**
+	 * @param {number} dices
+	 * @param {number} luckyDices
+	 * @param {number} position
+	 * @param {Tile[]} field
+	 * @param {Effect} effect
+	 */
+	rollLucky(dices, luckyDices, position, field, effect) {
+		return 6;
+	}
+}
+
 /**
  * @typedef {object} IStrategy
  * @member {(dices: number, luckyDices: number, position: number, field: Tile[], effect: Effect) => boolean} useLucky
@@ -159,5 +197,6 @@ class UseLuckyDiceAtOnceStrategy {
 export {
 	UseLuckyDiceAtOnceStrategy,
 	ReplicateDiceStrategy,
-	ReplicateDiceWhenFarEnoughStrategy
+	ReplicateDiceWhenFarEnoughStrategy,
+	UseLuckyDiceAtTheEndStrategy
 };

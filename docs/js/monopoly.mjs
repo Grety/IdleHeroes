@@ -7,7 +7,8 @@ import {
 import {
 	UseLuckyDiceAtOnceStrategy,
 	ReplicateDiceStrategy,
-	ReplicateDiceWhenFarEnoughStrategy
+	ReplicateDiceWhenFarEnoughStrategy,
+	UseLuckyDiceAtTheEndStrategy
 } from './Strategies.mjs';
 
 import randomInt from './randomInt';
@@ -39,6 +40,7 @@ const main = () => {
 		engine.play(FREE_DICES, new ReplicateDiceStrategy(), verbose);
 		// engine.play(FREE_DICES, new ReplicateDiceWhenFarEnoughStrategy(1), verbose);
 		// engine.play(FREE_DICES, new UseLuckyDiceAtOnceStrategy(), verbose);
+		// engine.play(FREE_DICES, new UseLuckyDiceAtTheEndStrategy(), verbose);
 
 		mergeMaps(avResults, engine.resources, (a = 0, b = 0) => a + b); // sum
 		mergeMaps(minResults, engine.resources, (a = Number.MAX_SAFE_INTEGER, b) => a > b ? b : a); // min
