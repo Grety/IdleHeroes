@@ -5,6 +5,7 @@
 	<link rel="shortcut icon" href="./img/favicon.ico">
 	<link rel="stylesheet" href="./css/main.css" />
 	<link rel="stylesheet" href="./css/field.css" />
+	<link rel="stylesheet" href="./css/modals.css" />
 	<script src="./js/devToolbar.js"></script>
 	<script type="module" src="./js/simulator.js"></script>
 	<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -20,29 +21,50 @@
 <body>
 	<h1>Idle Heroes Easter 2020</h1>
 	<h2>Monopoly Simulator</h2>
-	<h3><a target="_blank" href="./changelog.txt">v0.0.4</a></v0.0.3></h3>
-	<h4>
-		</h><i>Press numbers under dices to make a move</i></h4>
+	<h3><a target="_blank" href="./changelog.txt">v0.1.0</a></v0.0.3>
+	</h3>
+	<h4><i>Press numbers under dices to make a move</i></h4>
+	<div class="text-center margin-bottom-sm">
+		<button id="btnEditProperties">Edit properties</button>
+		<button id="btnEditStartupProperties">Edit startup defaults</button>
+	</div>
 	<table id="field">
 		<tr>
 			<td id="tile-1"></td>
 			<td></td>
-			<td id="tile3"><div class="tile-level"></div><div class="tile-reward"></div></td>
+			<td id="tile3">
+				<div class="tile-level"></div>
+				<div class="tile-reward"></div>
+			</td>
 			<td id="tile4"></td>
-			<td id="tile5"><div class="tile-level"></div></td>
+			<td id="tile5">
+				<div class="tile-level"></div>
+			</td>
 			<td></td>
 			<td>
 				<div id="stars" class="stars-count">0</div>
 			</td>
 		</tr>
 		<tr>
-			<td id="tile0"><div class="tile-level"></div></td>
-			<td id="tile1"><div class="tile-level"></div></td>
-			<td id="tile2"><div class="tile-level"></div></td>
+			<td id="tile0">
+				<div class="tile-level"></div>
+			</td>
+			<td id="tile1">
+				<div class="tile-level"></div>
+			</td>
+			<td id="tile2">
+				<div class="tile-level"></div>
+			</td>
 			<td></td>
-			<td id="tile6"><div class="tile-level"></div></td>
-			<td id="tile7"><div class="tile-level"></div></td>
-			<td id="tile8"><div class="tile-level"></div></td>
+			<td id="tile6">
+				<div class="tile-level"></div>
+			</td>
+			<td id="tile7">
+				<div class="tile-level"></div>
+			</td>
+			<td id="tile8">
+				<div class="tile-level"></div>
+			</td>
 		</tr>
 		<tr>
 			<td id="tile19"></td>
@@ -54,7 +76,9 @@
 			<td id="tile9"></td>
 		</tr>
 		<tr>
-			<td id="tile18"><div class="tile-level"></div></td>
+			<td id="tile18">
+				<div class="tile-level"></div>
+			</td>
 			<td></td>
 			<td>
 				<div id="dices" class="dices-tile">78</div>
@@ -66,16 +90,32 @@
 				<div id="luckyDices" class="dices-tile">0</div>
 			</td>
 			<td></td>
-			<td id="tile10"><div class="tile-level"></div><div class="tile-reward"></div></td>
+			<td id="tile10">
+				<div class="tile-level"></div>
+				<div class="tile-reward"></div>
+			</td>
 		</tr>
 		<tr>
-			<td id="tile17"><div class="tile-level"></div><div class="tile-reward"></div></td>
-			<td id="tile16"><div class="tile-level"></div></td>
-			<td id="tile15"><div class="tile-level"></div></td>
+			<td id="tile17">
+				<div class="tile-level"></div>
+				<div class="tile-reward"></div>
+			</td>
+			<td id="tile16">
+				<div class="tile-level"></div>
+			</td>
+			<td id="tile15">
+				<div class="tile-level"></div>
+			</td>
 			<td id="tile14"></td>
-			<td id="tile13"><div class="tile-level"></div></td>
-			<td id="tile12"><div class="tile-level"></div></td>
-			<td id="tile11"><div class="tile-level"></div></td>
+			<td id="tile13">
+				<div class="tile-level"></div>
+			</td>
+			<td id="tile12">
+				<div class="tile-level"></div>
+			</td>
+			<td id="tile11">
+				<div class="tile-level"></div>
+			</td>
 		</tr>
 	</table>
 	<div id="dev-toolbar" class="hidden">
@@ -84,6 +124,24 @@
 	</div>
 	<h3 style="color: white" id="effect"></h3>
 	<pre id="resources"></pre>
+	<div id="dlgProperties" class="modal-dialog" style="display: none;">
+		<h3 class="current">This dialog allows you to edit simulator properties on the fly</h3>
+		<h3 class="startup">This dialog allows you to edit startup defaults to which simulator resets on gameover</h3>
+
+		<div class="margin-bottom-sm"><label for="txtDices">Dices: </label><input id="txtDices" value="" type="number" min="0" /></div>
+		<div class="margin-bottom-sm"><label for="txtLuckyDices">Lucky Dices: </label><input id="txtLuckyDices" value="" min="0" type="number" /></div>
+		<div class="margin-bottom-sm"><label for="txtPosition">Position: </label><input id="txtPosition" value="" max="19" min="-1" type="number" /></div>
+		<div class="margin-bottom-sm"><label for="txtStars">Stars: </label><input id="txtStars" value="" min="0" type="number" /></div>
+		<div class="margin-bottom-sm"><label>Mushroom level @ 03: </label><input id="txtMushroom-03" min="1" max="3" type="number" /></div>
+		<div class="margin-bottom-sm"><label>Mushroom level @ 10: </label><input id="txtMushroom-10" min="1" max="3" type="number" /></div>
+		<div class="margin-bottom-sm"><label>Mushroom level @ 17: </label><input id="txtMushroom-17" min="1" max="3" type="number" /></div>
+
+		<div class="btn-toolbar">
+			<button id="btnSaveProperties">Save</button>
+			<button id="btnCancelProperties">Cancel</button>
+		</div>
+	</div>
+
 </body>
 
 </html>

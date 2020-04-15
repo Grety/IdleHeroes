@@ -4,7 +4,7 @@ import printMap from './printMap.mjs';
 
 const TILE_NAME_PRINT_WIDTH = 17;
 
-const recreateField = () => ([
+const createField = () => ([
 	new RewardTile('Spirit', [650000, 1300000, 2000000]),
 	new RewardTile('Promotion Stones', [500, 1000, 1500]),
 	new RewardTile('Magic Dust', [500, 1000, 1500]),
@@ -27,24 +27,35 @@ const recreateField = () => ([
 	new Tile('Lucky Dice')
 ]);
 
+const copyFieldLevels = (dest, src) => {
+	if (dest.length !== src.length) throw new Error('Cannot apply field levels, field length is different');
+	src.forEach((field, index) => {
+		if ('level' in field)
+			dest[index].level = field.level;
+	});
+}
 class MonopolyEngine {
 
 	constructor() {
+		const field = createField();
+		this.defaults = {
+			effect: Effect.NONE,
+			position: -1,
+			lastStep: '',
+			field,
+			resources: field.reduce((acc, tile) => Object.assign(acc, { [tile.name]: 0 }), {})
+		};
+		this.defaults.resources['Dice'] = FREE_DICES;
 		this.reset();
 	}
 
 	reset() {
-		this.effect = Effect.NONE;
-		this.position = -1;
-		this.lastStep = '';
-		this.field = recreateField();
-		this.resources = this.field.reduce((acc, tile) => Object.assign(acc, { [tile.name]: 0 }), {});
-	}
-
-	start() {
-		this.reset();
-		this.resources['Dice'] = FREE_DICES;
-		// this.resources['Lucky Dice'] = FREE_DICES;
+		this.effect = this.defaults.effect;
+		this.position = this.defaults.position;
+		this.lastStep = this.defaults.lastStep;
+		this.field = createField();
+		copyFieldLevels(this.field, this.defaults.field);
+		this.resources = Object.assign({}, this.defaults.resources);
 	}
 
 	/**

@@ -1,3 +1,5 @@
+2020-04-15 0.1.0
+Feature: allow edit current and startup properties of the simulation engine
 
 2020-04-13 0.0.4
 Fixed bug: when returning back from Karma to Tarot the latter must not cause effect. Reported by /u/Geedeepee91

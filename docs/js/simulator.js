@@ -21,6 +21,66 @@ const indicatorLastStep = document.getElementById('lastStep');
 const indicatorResources = document.getElementById('resources');
 const indicatorStars = document.getElementById('stars');
 const indicatorEffect = document.getElementById('effect');
+const btnEditProperties = document.getElementById('btnEditProperties');
+const btnEditStartupProperties = document.getElementById('btnEditStartupProperties');
+const propertiesDialog = document.getElementById('dlgProperties');
+const btnSaveProperties = document.getElementById('btnSaveProperties');
+const btnCancelProperties = document.getElementById('btnCancelProperties');
+
+btnCancelProperties.onclick = () => {
+	propertiesDialog.style.display = 'none';
+};
+
+const readEditableProperties = props => {
+	props.position = Number(document.getElementById('txtPosition').value);
+	props.resources["Dice"] = Number(document.getElementById('txtDices').value);
+	props.resources["Lucky Dice"] = Number(document.getElementById('txtLuckyDices').value);
+	props.resources["Stars"] = Number(document.getElementById('txtStars').value);
+	props.field[3].level = document.getElementById('txtMushroom-03').value - 1;
+	props.field[10].level = document.getElementById('txtMushroom-10').value - 1;
+	props.field[17].level = document.getElementById('txtMushroom-17').value - 1;
+}
+
+const saveCurrentProperties = () => {
+	readEditableProperties(engine);
+	refreshUi();
+	btnCancelProperties.onclick();
+};
+
+const saveStartupProperties = () => {
+	readEditableProperties(engine.defaults);
+	refreshUi();
+	btnCancelProperties.onclick();
+};
+
+const displayEditableProperties = props => {
+	document.getElementById('txtPosition').value = props.position;
+	document.getElementById('txtDices').value = props.resources["Dice"];
+	document.getElementById('txtLuckyDices').value = props.resources["Lucky Dice"];
+	document.getElementById('txtStars').value = props.resources["Stars"];
+	document.getElementById('txtMushroom-03').value = props.field[3].level + 1;
+	document.getElementById('txtMushroom-10').value = props.field[10].level + 1;
+	document.getElementById('txtMushroom-17').value = props.field[17].level + 1;
+}
+
+const displayDialogTitle = className => {
+	for (const tag of propertiesDialog.getElementsByTagName("h3"))
+		tag.style.display = tag.classList.contains(className) ? 'block' : 'none';
+};
+
+btnEditStartupProperties.onclick = () => {
+	propertiesDialog.style.display = 'block';
+	displayDialogTitle('startup');
+	btnSaveProperties.onclick = saveStartupProperties;
+	displayEditableProperties(engine.defaults);
+};
+
+btnEditProperties.onclick = () => {
+	propertiesDialog.style.display = 'block';
+	displayDialogTitle('current');
+	btnSaveProperties.onclick = saveCurrentProperties;
+	displayEditableProperties(engine);
+};
 
 const refreshUi = () => {
 	displayDices();
@@ -84,7 +144,7 @@ const displayLevels = field => {
 }
 
 const onRestart_Click = () => {
-	engine.start();
+	engine.reset();
 	refreshUi();
 }
 
@@ -92,7 +152,7 @@ const onNormalDice_Click = () => {
 	const dicesLeft = engine.resources[DICES];
 	const luckyDicesLeft = engine.resources[LUCKY_DICES];
 	if (!dicesLeft && !luckyDicesLeft) {
-		engine.start();
+		engine.reset();
 	}
 	else {
 		engine.step();
