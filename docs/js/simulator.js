@@ -43,7 +43,7 @@ const displayEditableProperties = props => {
 }
 
 const displayDialogTitle = className => {
-	propertiesDialog = byId('dlgProperties');
+	const propertiesDialog = byId('dlgProperties');
 	for (const tag of propertiesDialog.getElementsByTagName("h3"))
 		tag.style.display = tag.classList.contains(className) ? 'block' : 'none';
 };
