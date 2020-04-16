@@ -1,0 +1,11 @@
+
+table {
+	border-spacing: 0;
+}
+tr, td {
+	padding : 0;
+}
+tr:nth-child(odd) td {
+	background-color: #b4ebc8;
+	border: 0px;
+}

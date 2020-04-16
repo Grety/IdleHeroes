@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="./img/favicon.ico">
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/modals.css" />
+    <link rel="stylesheet" href="./css/statistics.css" />
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="module" src="./js/statistics.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-163395813-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-163395813-1');
+    </script>
+    <title>Statistics runner for monopoly simulations</title>
+</head>
+
+<body>
+    <h1><a href="./index.html">Back to Online Simulator</a>></h1>
+    <h3>Build probability of dice randomizer used for simulations</h3>
+    <div class="medium-panel">
+        <div class="margin-bottom-sm"><label>Number of runs: </label><input id="numRandomIntRuns" type="number" min="0"
+                value="100000" /></div>
+        <div>
+            <button id="btnBuildRandomInt">Build</button>
+        </div>
+    </div>
+    <div id="graphRandomInt" class="histogram"></div>
+    <br/><br/>
+    <h3>Simulate run with a predefined strategy</h3>
+    <div class="medium-panel">
+        <div class="margin-bottom-sm">
+            <label>Results details: </label>
+            <select id="selSimulationDetails">
+                <option value="single-detailed">Single Detailed run logging every step</option>
+                <option value="multi">Multiple runs with averaged results</option>
+            </select>
+        </div>
+        <div class="margin-bottom-sm">
+            <label>Strategy: </label>
+            <select id="selStrategy">
+                <option value="ReplicateDiceStrategy">Simple Lucky Dice replication</option>
+                <option value="UseLuckyDiceAtOnceStrategy">Use Lucky Dice At Once</option>
+                <option value="ReplicateDiceWhenFarEnoughStrategy">Replicate Dice When Far Enough</option>
+                <option value="UseLuckyDiceAtTheEndStrategy">Use Lucky Dice At The End</option>
+            </select>
+        </div>
+        <div class="margin-bottom-sm"><label>Starting Dices: </label><input id="numDiceCount" type="number"
+                min="0" value="78" /></div>
+        <div class="margin-bottom-sm hidden"><label>Number of runs: </label><input id="numSimulationRuns" type="number"
+                min="0" value="100000" /></div>
+        <div>
+            <button id="btnBuildSimulation">Build</button>
+        </div>
+    </div>
+    <table class="xlarge-panel striped hidden"><tbody id="tblLogs" ></tbody></table>
+    <div id="graphSimulations" class="histogram"></div>
+
+</body>
+
+</html>

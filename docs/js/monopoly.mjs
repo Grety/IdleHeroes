@@ -14,7 +14,7 @@ import {
 import randomInt from './randomInt';
 import printMap from './printMap';
 
-import { FREE_DICES } from './constants';
+import { TILE_NAME_PRINT_WIDTH, FREE_DICES } from './constants';
 
 const checkRandomIntIsUniform = () => {
 	const rng = {};
@@ -28,16 +28,29 @@ const checkRandomIntIsUniform = () => {
 	});
 };
 
+const logger = {
+	log: ({ position, landedOn, useLuckyDice, lastStep, dicesLeft, luckyDicesLeft, effect, stars }) => {
+		console.log([
+			`Tile[${position}]: ${landedOn ? landedOn.toString() : 'start'.padStart(TILE_NAME_PRINT_WIDTH, ' ')}`,
+			`usedLucky: ${useLuckyDice};`,
+			`stepped: ${lastStep};`,
+			`Dices: ${dicesLeft}, ${luckyDicesLeft};`,
+			`Effect: ${effect};`,
+			`Stars: ${stars}`
+		].join('\t'));
+	}
+};
+
 const main = () => {
 	const avResults = {};
 	const minResults = {};
 	const maxResults = {};
 	const engine = new MonopolyEngine();
 
-	const N = 100000;
-	const verbose = 0; // Flags: 1 - results of each run, 2 - steps of each run
+	const N = 1;//100000;
+	const verbose = 3; // Flags: 1 - results of each run, 2 - steps of each run
 	for (let i = 0; i < N; i++) {
-		engine.play(FREE_DICES, new ReplicateDiceStrategy(), verbose);
+		engine.play(FREE_DICES, new ReplicateDiceStrategy(), verbose, logger);
 		// engine.play(FREE_DICES, new ReplicateDiceWhenFarEnoughStrategy(1), verbose);
 		// engine.play(FREE_DICES, new UseLuckyDiceAtOnceStrategy(), verbose);
 		// engine.play(FREE_DICES, new UseLuckyDiceAtTheEndStrategy(), verbose);

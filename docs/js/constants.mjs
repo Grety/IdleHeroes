@@ -15,7 +15,17 @@ const Effect = [
 	'COPYCAT',
 	'UPGRADE'].reduce((acc, effect) => Object.assign(acc, { [effect]: effect }), {});
 
+const RESOURCES = {
+	LUCKY_DICES: 'Lucky Dice',
+	DICES: 'Dice',
+	STARS: 'Stars'
+}
+
+const TILE_NAME_PRINT_WIDTH = 17;
+
 export {
 	FREE_DICES,
-	Effect
+	TILE_NAME_PRINT_WIDTH,
+	Effect,
+	RESOURCES
 };

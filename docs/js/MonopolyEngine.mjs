@@ -1,8 +1,6 @@
 import randomInt from './randomInt.mjs';
-import { FREE_DICES, Effect } from './constants.mjs';
+import { TILE_NAME_PRINT_WIDTH, FREE_DICES, Effect } from './constants.mjs';
 import printMap from './printMap.mjs';
-
-const TILE_NAME_PRINT_WIDTH = 17;
 
 const createField = () => ([
 	new RewardTile('Spirit', [650000, 1300000, 2000000]),
@@ -66,13 +64,13 @@ class MonopolyEngine {
 	 * @param {TStrategy} strategy
 	 * @param {number} verbose
 	 */
-	play(diceCount, strategy, verbose) {
+	play(diceCount, strategy, verbose, logger) {
 		if (verbose)
-			console.log(`\nGambling with ${diceCount} dices on hands`);
+			logger.log(`\nGambling with ${diceCount} dices on hands`);
 		this.reset();
 		this.resources['Dice'] = diceCount;
 		// this.resources['Lucky Dice'] = 4;
-		while (this.move(strategy, (verbose & 2) === 2));
+		while (this.move(strategy, (verbose & 2) === 2, logger));
 
 		if ((verbose & 1) === 1)
 			this.printResources();
@@ -100,8 +98,9 @@ class MonopolyEngine {
 	 *
 	 * @param {TStrategy} strategy
 	 * @param {boolean} verbose
+	 * @param {{ log: (message: any) => void }} logger
 	 */
-	move(strategy, verbose) {
+	move(strategy, verbose, logger) {
 		let dicesLeft = this.resources['Dice'];
 		let luckyDicesLeft = this.resources['Lucky Dice'];
 		const useLuckyDice = Boolean(luckyDicesLeft && strategy.useLucky(dicesLeft, luckyDicesLeft, this.position, this.field, this.effect));
@@ -113,14 +112,16 @@ class MonopolyEngine {
 		const landedOn = this.field[this.position];
 
 		if (verbose)
-			console.log([
-				`Tile[${this.position}]: ${landedOn ? landedOn.toString() : 'start'.padStart(TILE_NAME_PRINT_WIDTH, ' ')}`,
-				`usedLucky: ${useLuckyDice};`,
-				`stepped: ${this.lastStep};`,
-				`Dices: ${dicesLeft}, ${luckyDicesLeft};`,
-				`Effect: ${this.effect};`,
-				`Stars: ${this.resources['Stars']}`
-			].join('\t'));
+			logger.log({
+				position: this.position,
+				landedOn,
+				useLuckyDice,
+				lastStep: this.lastStep,
+				dicesLeft,
+				luckyDicesLeft,
+				effect: this.effect,
+				stars: this.resources['Stars']
+			});
 
 		return canContinue;
 	}
@@ -130,7 +131,7 @@ class MonopolyEngine {
 		let luckyDicesLeft = this.resources['Lucky Dice'];
 
 		if ((dicesLeft <= 0 && !nextStep) || (luckyDicesLeft <= 0 && !!nextStep)) {
-			return 0;
+			return false;
 		}
 
 		const useLuckyDice = Boolean(nextStep);

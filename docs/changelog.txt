@@ -1,3 +1,6 @@
+2020-04-16 0.3.0
+Feature: statistics page with randomInt distribution and detailed single run
+
 2020-04-15 0.2.3
 Feature: add position historgram
 

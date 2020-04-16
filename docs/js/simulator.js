@@ -1,42 +1,18 @@
-import { MonopolyEngine } from "./MonopolyEngine.mjs";
-
-function track(eventName) {
-	try {
-		gtag('event', eventName);
-	}
-	catch (e) {
-		console.error(e);
-	}
-}
-
-const LUCKY_DICES = 'Lucky Dice';
-const DICES = 'Dice';
-const STARS = 'Stars';
+import { MonopolyEngine } from './MonopolyEngine.mjs';
+import { track, byId, showHistorgram, initCharts } from './uiUtils.mjs';
+import { RESOURCES } from './constants.mjs';
 
 const engine = new MonopolyEngine();
-let chartsInitialized = false;
 
-const indicatorDices = document.getElementById('dices');
-const indicatorLuckyDices = document.getElementById('luckyDices');
-const indicatorLastStep = document.getElementById('lastStep');
-const indicatorResources = document.getElementById('resources');
-const indicatorStars = document.getElementById('stars');
-const indicatorEffect = document.getElementById('effect');
-const btnEditProperties = document.getElementById('btnEditProperties');
-const btnEditStartupProperties = document.getElementById('btnEditStartupProperties');
-const propertiesDialog = document.getElementById('dlgProperties');
-const btnSaveProperties = document.getElementById('btnSaveProperties');
-const btnCancelProperties = document.getElementById('btnCancelProperties');
-
-btnCancelProperties.onclick = () => {
-	propertiesDialog.style.display = 'none';
+byId('btnCancelProperties').onclick = () => {
+	byId('dlgProperties').style.display = 'none';
 };
 
 const readEditableProperties = props => {
 	props.position = Number(document.getElementById('txtPosition').value);
-	props.resources["Dice"] = Number(document.getElementById('txtDices').value);
-	props.resources["Lucky Dice"] = Number(document.getElementById('txtLuckyDices').value);
-	props.resources["Stars"] = Number(document.getElementById('txtStars').value);
+	props.resources[RESOURCES.DICES] = Number(document.getElementById('txtDices').value);
+	props.resources[RESOURCES.LUCKY_DICES] = Number(document.getElementById('txtLuckyDices').value);
+	props.resources[RESOURCES.STARS] = Number(document.getElementById('txtStars').value);
 	props.field[3].level = document.getElementById('txtMushroom-03').value - 1;
 	props.field[10].level = document.getElementById('txtMushroom-10').value - 1;
 	props.field[17].level = document.getElementById('txtMushroom-17').value - 1;
@@ -46,41 +22,46 @@ const saveCurrentProperties = () => {
 	readEditableProperties(engine);
 	refreshUi();
 	btnCancelProperties.onclick();
+	track('Save properties');
 };
 
 const saveStartupProperties = () => {
 	readEditableProperties(engine.defaults);
 	refreshUi();
 	btnCancelProperties.onclick();
+	track('Save Start properties');
 };
 
 const displayEditableProperties = props => {
 	document.getElementById('txtPosition').value = props.position;
-	document.getElementById('txtDices').value = props.resources["Dice"];
-	document.getElementById('txtLuckyDices').value = props.resources["Lucky Dice"];
-	document.getElementById('txtStars').value = props.resources["Stars"];
+	document.getElementById('txtDices').value = props.resources[RESOURCES.DICES];
+	document.getElementById('txtLuckyDices').value = props.resources[RESOURCES.LUCKY_DICES];
+	document.getElementById('txtStars').value = props.resources[RESOURCES.STARS];
 	document.getElementById('txtMushroom-03').value = props.field[3].level + 1;
 	document.getElementById('txtMushroom-10').value = props.field[10].level + 1;
 	document.getElementById('txtMushroom-17').value = props.field[17].level + 1;
 }
 
 const displayDialogTitle = className => {
+	propertiesDialog = byId('dlgProperties');
 	for (const tag of propertiesDialog.getElementsByTagName("h3"))
 		tag.style.display = tag.classList.contains(className) ? 'block' : 'none';
 };
 
-btnEditStartupProperties.onclick = () => {
-	propertiesDialog.style.display = 'block';
+byId('btnEditStartupProperties').onclick = () => {
+	byId('dlgProperties').style.display = 'block';
 	displayDialogTitle('startup');
-	btnSaveProperties.onclick = saveStartupProperties;
+	byId('btnSaveProperties').onclick = saveStartupProperties;
 	displayEditableProperties(engine.defaults);
+	track('Edit Start properties');
 };
 
-btnEditProperties.onclick = () => {
-	propertiesDialog.style.display = 'block';
+byId('btnEditProperties').onclick = () => {
+	byId('dlgProperties').style.display = 'block';
 	displayDialogTitle('current');
-	btnSaveProperties.onclick = saveCurrentProperties;
+	byId('btnSaveProperties').onclick = saveCurrentProperties;
 	displayEditableProperties(engine);
+	track('Edit properties');
 };
 
 const diceRolls = [];
@@ -103,15 +84,15 @@ const displayResources = () => {
 		.map(([name, value]) => `${name}: ${value}`)
 		.join('\n');
 	const tiles = engine.field.map(tile => `${tile.name} ${'level' in tile ? `Lv. ${tile.level + 1}` : ''}`).join('\n');
-	indicatorResources.innerText = [resources, tiles].join('\n-----------\n');
+	byId('resources').innerText = [resources, tiles].join('\n-----------\n');
 }
 
 const displayLastStep = () => {
-	indicatorLastStep.innerText = engine.lastStep;
+	byId('lastStep').innerText = engine.lastStep;
 };
 
 const displayEffect = () => {
-	indicatorEffect.innerText = `Current Effect: ${engine.effect}`;
+	byId('effect').innerText = `Current Effect: ${engine.effect}`;
 };
 
 const refreshPosition = () => {
@@ -124,12 +105,12 @@ const refreshPosition = () => {
 };
 
 const displayDices = () => {
-	indicatorDices.innerText = engine.resources[DICES];
-	indicatorLuckyDices.innerText = engine.resources[LUCKY_DICES];
+	byId('dices').innerText = engine.resources[RESOURCES.DICES];
+	byId('luckyDices').innerText = engine.resources[RESOURCES.LUCKY_DICES];
 }
 
 const displayStars = () => {
-	indicatorStars.innerText = engine.resources[STARS];
+	byId('stars').innerText = engine.resources[RESOURCES.STARS];
 }
 
 const displayLevels = field => {
@@ -149,42 +130,12 @@ const displayLevels = field => {
 	});
 }
 
-const displayDiceStatistics = (lastStepData) => {
-	if (!lastStepData.length)
-		return;
-	if (!chartsInitialized) {
-		document.getElementById('dice_statistics').innerText = 'Google Charts not loaded yet';
-		return;
-	}
-	const dataTable = google.visualization.arrayToDataTable([
-		['Roll', 'Dice number'],
-		...lastStepData.map(dice => [, dice - 1])
-	])
-	const options = {
-		title: 'Dice rolls histogram of your latest run',
-		legend: { position: 'none' },
-	};
-	const chart = new google.visualization.Histogram(document.getElementById('dice_statistics'));
-	chart.draw(dataTable, options);
+const displayDiceStatistics = lastStepData => {
+	showHistorgram('dice_statistics', 'Dice rolls histogram of your latest run', lastStepData, ['Roll', 'Dice number']);
 };
 
-const displayTilesStatistics = (tilesHitData) => {
-	if (!tilesHitData.length)
-		return;
-	if (!chartsInitialized) {
-		document.getElementById('tiles_statistics').innerText = 'Google Charts not loaded yet';
-		return;
-	}
-	const dataTable = google.visualization.arrayToDataTable([
-		['Roll', 'Position'],
-		...tilesHitData.map(position => [, position])
-	])
-	const options = {
-		title: 'Position histogram of your latest run',
-		legend: { position: 'none' },
-	};
-	const chart = new google.visualization.Histogram(document.getElementById('tiles_statistics'));
-	chart.draw(dataTable, options);
+const displayTilesStatistics = tilesHitData => {
+	showHistorgram('tiles_statistics', 'Position histogram of your latest run', tilesHitData, ['Roll', 'Position']);
 };
 
 const onRestart_Click = () => {
@@ -193,8 +144,8 @@ const onRestart_Click = () => {
 }
 
 const onNormalDice_Click = () => {
-	const dicesLeft = engine.resources[DICES];
-	const luckyDicesLeft = engine.resources[LUCKY_DICES];
+	const dicesLeft = engine.resources[RESOURCES.DICES];
+	const luckyDicesLeft = engine.resources[RESOURCES.LUCKY_DICES];
 	if (!dicesLeft && !luckyDicesLeft) {
 		engine.reset();
 		diceRolls.length = 0;
@@ -212,7 +163,7 @@ const onNormalDice_Click = () => {
 }
 
 const onLuckyDice_Click = () => {
-	if (engine.resources[LUCKY_DICES] <= 0)
+	if (engine.resources[RESOURCES.LUCKY_DICES] <= 0)
 		return;
 
 	let nextStep = 0;
@@ -229,14 +180,10 @@ const onLuckyDice_Click = () => {
 	track('Lucky Dice');
 };
 
-indicatorDices.onclick = onNormalDice_Click;
-indicatorLuckyDices.onclick = onLuckyDice_Click;
+byId('dices').onclick = onNormalDice_Click;
+byId('luckyDices').onclick = onLuckyDice_Click;
 
 document.body.onload = () => {
 	onRestart_Click();
-	google.charts.load('current', { packages: ['corechart'] })
-	google.charts.setOnLoadCallback(() => {
-		chartsInitialized = true;
-		console.log('Google Charts initialized');
-	});
+	initCharts();
 };

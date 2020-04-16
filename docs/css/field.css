@@ -107,10 +107,3 @@ td.active:after {
     right: 0;
     bottom: 20px;
 }
-
-#resources {
-	width: 200px;
-    margin-left: auto;
-	margin-right: auto;
-	color: white;
-}
