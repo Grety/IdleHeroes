@@ -1,5 +1,5 @@
 import { MonopolyEngine } from './MonopolyEngine.mjs';
-import { track, byId, showHistorgram, initCharts } from './uiUtils.mjs';
+import { track, byId, showHistogram, initCharts } from './uiUtils.mjs';
 import { RESOURCES } from './constants.mjs';
 
 const engine = new MonopolyEngine();
@@ -131,11 +131,13 @@ const displayLevels = field => {
 }
 
 const displayDiceStatistics = lastStepData => {
-	showHistorgram('dice_statistics', 'Dice rolls histogram of your latest run', lastStepData, ['Roll', 'Dice number']);
+	const options = { title: 'Dice rolls histogram of your latest run', histogram: { bucketSize: 1 } };
+	showHistogram('dice_statistics', lastStepData, ['Dice number'], options);
 };
 
 const displayTilesStatistics = tilesHitData => {
-	showHistorgram('tiles_statistics', 'Position histogram of your latest run', tilesHitData, ['Roll', 'Position']);
+	const options = { title: 'Position histogram of your latest run', histogram: { bucketSize: 1 } };
+	showHistogram('tiles_statistics', tilesHitData, ['Position'], options);
 };
 
 const onRestart_Click = () => {

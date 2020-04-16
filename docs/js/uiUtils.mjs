@@ -1,6 +1,8 @@
 const byId = id => document.getElementById(id);
 
 function track(eventName) {
+	if (window.location.host.startsWith('localhost'))
+		return;
 	try {
 		gtag('event', eventName);
 	}
@@ -11,7 +13,7 @@ function track(eventName) {
 
 let chartsInitialized;
 
-const showHistorgram = (containerId, title, dataPoints, columnNames) => {
+const showHistogram = (containerId, dataPoints, columnNames, options) => {
 	if (!dataPoints.length)
 		return;
 	if (!chartsInitialized) {
@@ -20,12 +22,8 @@ const showHistorgram = (containerId, title, dataPoints, columnNames) => {
 	}
 	const dataTable = google.visualization.arrayToDataTable([
 		columnNames,
-		...dataPoints.map(point => [, point])
+		...dataPoints.map(point => Array.isArray(point) ? point : [point])
 	])
-	const options = {
-		title,
-		// legend: { position: 'none' },
-	};
 	const chart = new google.visualization.Histogram(document.getElementById(containerId));
 	chart.draw(dataTable, options);
 };
@@ -53,6 +51,19 @@ const showBars = (containerId, { title, hAxisTitle, vAxisTitle }, dataPoints, co
 	materialChart.draw(dataTable, materialOptions);
 };
 
+const showGraph = (containerId, data, graphName, options) => {
+	if (!data.length)
+		return;
+	if (!chartsInitialized) {
+		document.getElementById(containerId).innerText = 'Google Charts not loaded yet';
+		return;
+	}
+	const dataTable = google.visualization.arrayToDataTable(data)
+
+	const chart = new google.visualization[graphName](document.getElementById(containerId));
+	chart.draw(dataTable, options);
+};
+
 const initCharts = () => {
 	google.charts.load('current', { packages: ['corechart'] })
 	google.charts.setOnLoadCallback(() => {
@@ -64,7 +75,8 @@ const initCharts = () => {
 export {
 	track,
 	byId,
-	showHistorgram,
+	showHistogram,
 	initCharts,
-	showBars
+	showBars,
+	showGraph
 };

@@ -36,9 +36,9 @@
     <div class="medium-panel">
         <div class="margin-bottom-sm">
             <label>Results details: </label>
-            <select id="selSimulationDetails">
+            <select id="selSimulationDetails" >
                 <option value="single-detailed">Single Detailed run logging every step</option>
-                <option value="multi">Multiple runs with averaged results</option>
+                <option value="multi" selected="true">Multiple runs with averaged results</option>
             </select>
         </div>
         <div class="margin-bottom-sm">
@@ -59,7 +59,11 @@
         </div>
     </div>
     <table class="xlarge-panel striped hidden"><tbody id="tblLogs" ></tbody></table>
-    <div id="graphSimulations" class="histogram"></div>
+    <div id="graphStars" class="histogram"></div>
+    <div id="graphSteps" class="histogram"></div>
+    <div id="graphFirstLucky" class="histogram"></div>
+    <div id="graphStepsToStars" class="histogram"></div>
+    <div id="graphFirstLuckyToStars" class="histogram"></div>
 
 </body>
 
